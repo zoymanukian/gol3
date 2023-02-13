@@ -49,7 +49,7 @@ function generateMatrix(matLength, gr, grEa, pre, fert, creat) {
 
     return matrix;
 }
-let matrix = generateMatrix(60, 50, 30, 15, 15, 15, 10)
+let matrix = generateMatrix(60, 50, 30, 15, 15, 15, 2)
 var side = 30;
 
 let grassArr = [];
@@ -77,10 +77,10 @@ function setup() {
             } else if (matrix[y][x] == 4) {
                 let grFertilizer = new Fertilizer(x, y);
                 fertilizerArr.push(grFertilizer)
-            } else if (matrix[y][x] == 5) {
+             } else if (matrix[y][x] == 5) {
                 let grCreator = new Creator(x, y);
-                creatorArr.push(grCreator)
-            }
+               creatorArr.push(grCreator)
+             }
         }
     }
 }

@@ -1,9 +1,7 @@
-class Fertilizer {
+class Fertilizer extends LivingCreature {
     constructor(x, y) {
-        this.x = x;
-        this.y = y;
+        super(x,y);
         this.energy = 8;
-        this.directions = [];
     }
     getNewCoordinates() {
         this.directions = [
@@ -20,17 +18,7 @@ class Fertilizer {
     }
     chooseCell(character, character1) {
         this.getNewCoordinates()
-        var found = [];
-        for (var i in this.directions) {
-            var x = this.directions[i][0];
-            var y = this.directions[i][1];
-            if (x >= 0 && x < matrix[0].length && y >= 0 && y < matrix.length) {
-                if (matrix[y][x] == character || matrix[y][x] == character1) {
-                    found.push(this.directions[i]);
-                }
-            }
-        }
-        return found;
+        return super.chooseCell(character, character1)
     }
 
     mul() {
