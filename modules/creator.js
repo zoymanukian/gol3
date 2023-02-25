@@ -1,4 +1,5 @@
-class Creator extends LivingCreature {
+var LivingCreature = require("./living");
+module.exports = class Creator extends LivingCreature{
     constructor(x, y) {
         super(x, y);
         this.energy = 4;
@@ -22,11 +23,19 @@ class Creator extends LivingCreature {
         return super.chooseCell(character)
     }
 
+
+
+    random(emptyCells) {
+        return emptyCells[Math.floor(Math.random() * emptyCells.length)]
+    }
+
+
+
     mul() {
-        let count = Math.round(random(5))
+        let count = Math.round(this.random(5))
         this.energy--;
         var emptyCells = this.chooseCell(0);
-        var newCell = random(emptyCells);
+        var newCell = this.random(emptyCells);
 
         console.log(emptyCells, newCell);
         if (newCell) {
@@ -58,7 +67,7 @@ class Creator extends LivingCreature {
     move() {
         this.energy++
         var emptyCells = this.chooseCell(0);
-        var newCell = random(emptyCells);
+        var newCell = this.random(emptyCells);
         if (newCell && this.energy >= 0) {
             var newX = newCell[0];
             var newY = newCell[1];
