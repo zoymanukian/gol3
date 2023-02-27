@@ -5,16 +5,28 @@
     <script src="/socket.io/socket.io.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Game of life</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+        <div class="div1">
+                <button class="button" onclick="Grass()">Add Grass</button>
+                <button class="button" onclick="GrassEater()">Add GrassEater</button>
+                <button class="button" onclick="Predator()">Add Predator</button>
+                <button class="button" onclick="Fertilizer()">Add Fertilizer</button>
+            </div>
+            <div class="div1">
+                <button class="button" onclick="Clear()">Clear</button>
+                <button class="button" onclick="Random()">Random</button>
+            </div>
+            <div class="div1">
+                <button id="btn" class="button">Spring</button>
+                <button id="btn1" class="button">Summer</button>
+                <button id="btn2" class="button">Autumn</button>
+                <button id="btn3" class="button">Winter</button>
+            </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script>
-    <!-- <script src="living.js"></script>
-    <script src="grass.js"></script>
-    <script src="grassEater.js"></script>
-    <script src="predator.js"></script>
-    <script src="fertilizer.js"></script>
-    <script src="creator.js"></script> -->
     <script src="script.js"></script>
 </body>
 </html>

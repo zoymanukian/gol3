@@ -65,7 +65,7 @@ module.exports = class Creator extends LivingCreature{
         }
     }
     move() {
-        this.energy++
+        this.energy--
         var emptyCells = this.chooseCell(0);
         var newCell = this.random(emptyCells);
         if (newCell && this.energy >= 0) {
