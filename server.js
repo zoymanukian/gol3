@@ -7,10 +7,20 @@ var io = require('socket.io')(server);
 app.use(express.static("modules"));
 app.get('/', function (req, res) {
 
-res.redirect('index.html');
+    res.redirect('index.html');
 });
 
 server.listen(3000);
+
+
+stat = {
+    grass: 0,
+    grassEater: 0,
+    predator: 0,
+    creator: 0,
+    fertilizer: 0,
+    blackhole: 0,
+}
 
 grassArr = [];
 grassEaterArr = [];
@@ -18,10 +28,10 @@ predatorArr = [];
 creatorArr = [];
 fertilizerArr = [];
 energyArr = [];
-bombArr = [];
+blackholeArr = [];
 matrix = [];
 
-function generateMatrix(matLen, gr, grEat, pr, cre, fer, bo) {
+function generateMatrix(matLen, gr, grEat, pr, cre, fer, bh) {
 
     for (let i = 0; i < matLen; i++) {
         matrix[i] = []
@@ -66,7 +76,7 @@ function generateMatrix(matLen, gr, grEat, pr, cre, fer, bo) {
             matrix[y][x] = 5
         }
     }
-    for (let i = 0; i < bo; i++) {
+    for (let i = 0; i < bh; i++) {
         let x = Math.floor(Math.random() * matLen)
         let y = Math.floor(Math.random() * matLen)
         if (matrix[y][x] == 0) {
@@ -80,7 +90,7 @@ function generateMatrix(matLen, gr, grEat, pr, cre, fer, bo) {
 
 generateMatrix(25, 10, 15, 10, 6, 3, 2)
 
-function createObject(){
+function createObject() {
 
     for (var y = 0; y < matrix.length; y++) {
         for (var x = 0; x < matrix[y].length; x++) {
@@ -98,11 +108,11 @@ function createObject(){
                 fertilizerArr.push(grFertilizer)
             } else if (matrix[y][x] == 5) {
                 let grCreator = new Creator(x, y);
-               creatorArr.push(grCreator)
-             } else if (matrix[y][x] == 6) {
-                let grBomb = new Bomb(x, y);
-               bombArr.push(grBomb)
-             }
+                creatorArr.push(grCreator)
+            } else if (matrix[y][x] == 6) {
+                let grBlackhole = new Blackhole(x, y);
+                blackholeArr.push(grBlackhole)
+            }
         }
     }
 }
@@ -117,7 +127,7 @@ io.on('connection', function (socket) {
 
 });
 
-function game(){
+function game() {
 
     for (let i in grassArr) {
         grassArr[i].mul()
@@ -133,13 +143,13 @@ function game(){
         fertilizerArr[i].eat()
     }
 
-    for(let i in creatorArr){
-       creatorArr[i].mul()
+    for (let i in creatorArr) {
+        creatorArr[i].mul()
     }
 
-    for(let i in bombArr){
-        bombArr[i].eat()
-     }
+    for (let i in blackholeArr) {
+        blackholeArr[i].mul()
+    }
 
 
     io.sockets.emit("send matrix", matrix);
@@ -155,7 +165,7 @@ GrassEater = require("./modules/grassEater")
 Predator = require("./modules/predator")
 Creator = require('./modules/creator')
 Fertilizer = require('./modules/fertilizer')
-Bomb = require('./modules/bomb')
+Blackhole = require('./modules/blackhole')
 
 function Clear() {
     grassArr = [];
@@ -163,7 +173,7 @@ function Clear() {
     predatorArr = [];
     creatorArr = [];
     fertilizerArr = [];
-    bombArr = []
+    blackholeArr = []
 
     for (var y = 0; y < matrix.length; y++) {
         for (var x = 0; x < matrix[y].length; x++) {
@@ -220,18 +230,52 @@ function FertilizerCreator() {
     }
 }
 
-function BombCreator() {
+function BlackholeCreator() {
     let x = Math.floor(Math.random() * 25)
     let y = Math.floor(Math.random() * 25)
     if (matrix[y][x] == 0) {
         matrix[y][x] = 6
-        bombArr.push(new Bomb(x, y));
+        bombArr.push(new Blackhole(x, y));
     }
 }
 
 function Random() {
     generateMatrix(40, 40, 25, 20, 15, 4, 3, 2)
 }
+
+function work() {
+    for (var i = 0; i < grassArr.length; i++) {
+        grassArr[i].mul();
+    }
+    stat.grass = i;
+
+}
+for (var i = 0; i < grassEaterArr.length; i++) {
+    grassEaterArr[i].eat();
+}
+stat.grassEater = i;
+for (var i = 0; i < predatorArr.length; i++) {
+    predatorArr[i].eat();
+}
+stat.predator = i;
+for (var i = 0; i < creatorArr.length; i++) {
+    creatorArr[i].mul();
+}
+stat.creator = i;
+for(var i = 0; i < fertilizerArr.length; i++ ){
+    fertilizerArr[i].eat();
+}
+stat.fertilizer = i;
+for(var i = 0; i < blackholeArr.length; i++ ){
+    blackholeArr[i].mul();
+}
+stat.blackhole = i;
+
+io.sockets.emit('grass', stat);
+io.sockets.emit('send matrix', matrix)
+
+
+
 
 io.on('connection', function (socket) {
     createObject();
@@ -242,6 +286,6 @@ io.on('connection', function (socket) {
     socket.on("fertilizer", FertilizerCreator);
     socket.on("random", Random);
     socket.on("clear", Clear);
-    socket.on("bomb", BombCreator);
+    socket.on("blackhole", BlackholeCreator);
 
 });

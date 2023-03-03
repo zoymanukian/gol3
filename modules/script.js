@@ -60,6 +60,18 @@ function drawing(matrix) {
     }
 }
 
+socket.on('grass', stats)
+
+
+function stats(stat){
+  document.getElementById('grass').innerHTML = stat.grass
+  document.getElementById('grassEater').innerHTML = stat.grassEater
+  document.getElementById('predator').innerHTML = stat.predator
+  document.getElementById('creator').innerHTML = stat.creator
+  document.getElementById('fertilizer').innerHTML = stat.fertilizer
+  document.getElementById('blackhole').innerHTML = stat.Blackhole
+}
+
 
 function Clear() {
   socket.emit("clear")
@@ -82,7 +94,9 @@ function Fertilizer() {
 function Random() {
   socket.emit("random")
 }
-function Bomb() {
-    socket.emit("bomb")
+function Blackhole() {
+    socket.emit("blackhole")
   }
 socket.on('send matrix', drawing);
+
+
