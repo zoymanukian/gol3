@@ -2,7 +2,7 @@ var LivingCreature = require("./living")
 module.exports = class Blackhole extends LivingCreature {
     constructor(x, y) {
         super(x, y)
-        this.energy = 17;
+        this.energy = 1;
     }
     getNewCoordinates() {
         this.directions = [
@@ -39,7 +39,7 @@ module.exports = class Blackhole extends LivingCreature {
 
             var newblackholeArr = new Blackhole(newX, newY);
             blackholeArr.push(newblackholeArr);
-            this.energy = 17;
+            this.energy = 1;
         }
     }
 

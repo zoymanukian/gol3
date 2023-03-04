@@ -127,38 +127,6 @@ io.on('connection', function (socket) {
 
 });
 
-function game() {
-
-    for (let i in grassArr) {
-        grassArr[i].mul()
-    }
-
-    for (let i in grassEaterArr) {
-        grassEaterArr[i].eat()
-    }
-    for (let i in predatorArr) {
-        predatorArr[i].eat()
-    }
-    for (let i in fertilizerArr) {
-        fertilizerArr[i].eat()
-    }
-
-    for (let i in creatorArr) {
-        creatorArr[i].mul()
-    }
-
-    for (let i in blackholeArr) {
-        blackholeArr[i].mul()
-    }
-
-
-    io.sockets.emit("send matrix", matrix);
-}
-
-
-
-setInterval(game, 700)
-
 LivingCreature = require("./modules/living")
 Grass = require("./modules/grass")
 GrassEater = require("./modules/grassEater")
@@ -167,7 +135,7 @@ Creator = require('./modules/creator')
 Fertilizer = require('./modules/fertilizer')
 Blackhole = require('./modules/blackhole')
 
-function Clear() {
+function Lightning() {
     grassArr = [];
     grassEaterArr = [];
     predatorArr = [];
@@ -239,53 +207,59 @@ function BlackholeCreator() {
     }
 }
 
-function Random() {
-    generateMatrix(40, 40, 25, 20, 15, 4, 3, 2)
-}
 
-function work() {
+function game() {
     for (var i = 0; i < grassArr.length; i++) {
         grassArr[i].mul();
     }
     stat.grass = i;
+    for (var i = 0; i < grassEaterArr.length; i++) {
+        grassEaterArr[i].eat();
+    }
+    stat.grassEater = i;
+    for (var i = 0; i < predatorArr.length; i++) {
+        predatorArr[i].eat();
+    }
+    stat.predator = i;
+    for (var i = 0; i < creatorArr.length; i++) {
+        creatorArr[i].mul();
+    }
+    stat.creator = i;
+    for (var i = 0; i < fertilizerArr.length; i++) {
+        fertilizerArr[i].eat();
+    }
+    stat.fertilizer = i;
+    for (var i = 0; i < blackholeArr.length; i++) {
+        blackholeArr[i].mul();
+    }
+    stat.blackhole = i;
+    
+    io.sockets.emit('grass', stat);
+    io.sockets.emit('send matrix', matrix)
+}
 
-}
-for (var i = 0; i < grassEaterArr.length; i++) {
-    grassEaterArr[i].eat();
-}
-stat.grassEater = i;
-for (var i = 0; i < predatorArr.length; i++) {
-    predatorArr[i].eat();
-}
-stat.predator = i;
-for (var i = 0; i < creatorArr.length; i++) {
-    creatorArr[i].mul();
-}
-stat.creator = i;
-for(var i = 0; i < fertilizerArr.length; i++ ){
-    fertilizerArr[i].eat();
-}
-stat.fertilizer = i;
-for(var i = 0; i < blackholeArr.length; i++ ){
-    blackholeArr[i].mul();
-}
-stat.blackhole = i;
 
-io.sockets.emit('grass', stat);
-io.sockets.emit('send matrix', matrix)
 
+
+function Random() {
+    Lightning()
+    generateMatrix(40, 40, 25, 20, 15, 4, 3, 2)
+    createObject()
+    
+}
 
 
 
 io.on('connection', function (socket) {
     createObject();
+    setInterval(game, 1500 )
     socket.on("grass", GrassCreator);
     socket.on("grassEater", GrassEaterCreator);
     socket.on("creator", GrassPredatorCreator);
     socket.on("predator", PredatorCreator);
     socket.on("fertilizer", FertilizerCreator);
     socket.on("random", Random);
-    socket.on("clear", Clear);
+    socket.on("lightning", Lightning);
     socket.on("blackhole", BlackholeCreator);
 
 });

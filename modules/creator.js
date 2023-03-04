@@ -37,7 +37,7 @@ module.exports = class Creator extends LivingCreature{
         var emptyCells = this.chooseCell(0);
         var newCell = this.random(emptyCells);
 
-        console.log(emptyCells, newCell);
+        //console.log(emptyCells, newCell);
         if (newCell) {
             let newX = newCell[0];
             let newY = newCell[1];

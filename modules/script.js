@@ -10,7 +10,7 @@ socket.on('send matrix', drawing );
 
 function setup() {
     frameRate(5);
-    createCanvas(3000, 3000);
+    createCanvas(25*side , 25*side);
     background('#acacac');
 }
 
@@ -69,12 +69,12 @@ function stats(stat){
   document.getElementById('predator').innerHTML = stat.predator
   document.getElementById('creator').innerHTML = stat.creator
   document.getElementById('fertilizer').innerHTML = stat.fertilizer
-  document.getElementById('blackhole').innerHTML = stat.Blackhole
+  document.getElementById('blackhole').innerHTML = stat.blackhole
 }
 
 
-function Clear() {
-  socket.emit("clear")
+function Lightning() {
+  socket.emit("lightning")
 }
 function GrassEater() {
   socket.emit("grassEater")
